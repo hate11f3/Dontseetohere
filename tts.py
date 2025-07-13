@@ -18,14 +18,14 @@ class TTSVoiceMod(loader.Module):
             return
 
         try:
-            tts = gTTS(text, lang='ru')  # Можно сменить на 'en' или другой язык
+            tts = gTTS(text, lang='ru')  # привет
             file_path = "voice_message.ogg"
             tts.save(file_path)
 
             await self.client.send_file(
                 message.chat_id,
                 file_path,
-                voice_note=True,  # Отправляем как голосовуху
+                voice_note=True,  
                 reply_to=message.reply_to_msg_id
             )
 
