@@ -16,6 +16,7 @@ class GitHubUploaderMod(loader.Module):
             loader.ConfigValue(
                 "github_token", None,
                 lambda: "Токен GitHub с правами доступа к репозиторию (repo)"
+                validator=loader.validators.Hidden() # скрой токен из кфг плиз
             ),
             loader.ConfigValue(
                 "github_repo", None,
