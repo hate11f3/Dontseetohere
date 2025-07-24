@@ -1,3 +1,13 @@
+#.          ___  __ _ _   _  ___  ___  __ _ _ __ ___ 
+#          / __|/ _` | | | |/ _ \/ _ \/ _` | '__/ _ \
+#          \__ \ (_| | |_| |  __/  __/ (_| | | |  __/
+#          |___/\__, |\__,_|\___|\___|\__,_|_|  \___|
+#                  |_|                               
+#       Всем привет ребята, я squeeare создатель модулей
+#.             Надеюсь вам понравится этот модуль
+#.    Помогите мне стать оффициальным производителем модулей
+#.        .             Буду очень рад :)
+
 from telethon.tl.types import Message
 from .. import loader, utils
 import requests
@@ -5,8 +15,6 @@ import base64
 
 @loader.tds
 class GitHubUploaderMod(loader.Module):
-    """Загрузка файлов в репозиторий GitHub по реплаю"""
-
     strings = {
         "name": "GitHubUploader",
         "no_reply": "❌ Ответь на файл, который хочешь загрузить на GitHub.",
@@ -17,32 +25,14 @@ class GitHubUploaderMod(loader.Module):
 
     def __init__(self):
         self.config = loader.ModuleConfig(
-            loader.ConfigValue(
-                "github_token",
-                None,
-                "GitHub токен. Получить можно тут: https://github.com/settings/tokens",
-                validator=loader.validators.Hidden()
-            ),
-            loader.ConfigValue(
-                "github_repo",
-                "user/repo",
-                "Формат: username/reponame"
-            ),
-            loader.ConfigValue(
-                "github_path",
-                "",
-                "Путь в репозитории (например: `folder/`). Оставь пустым для корня."
-            ),
-            loader.ConfigValue(
-                "github_branch",
-                "main",
-                "Ветка для загрузки файлов"
-            )
+            loader.ConfigValue("github_token", None, "", validator=loader.validators.Hidden()),
+            loader.ConfigValue("github_repo", "user/repo", ""),
+            loader.ConfigValue("github_path", "", ""),
+            loader.ConfigValue("github_branch", "main", "")
         )
 
     @loader.command()
     async def gitupload(self, message: Message):
-        """Загружает файл с реплая в указанный репозиторий GitHub"""
         reply = await message.get_reply_message()
         if not reply or not reply.file:
             await utils.answer(message, self.strings("no_reply"))
@@ -70,11 +60,18 @@ class GitHubUploaderMod(loader.Module):
             "Authorization": f"Bearer {token}",
             "Accept": "application/vnd.github+json"
         }
+
+        r_get = requests.get(url, headers=headers, params={"ref": branch})
+        sha = r_get.json().get("sha") if r_get.status_code == 200 else None
+
         data = {
-            "message": f"Upload {filename}",
+            "message": f"{'Update' if sha else 'Upload'} {filename}",
             "content": content,
             "branch": branch
         }
+
+        if sha:
+            data["sha"] = sha
 
         r = requests.put(url, headers=headers, json=data)
 
@@ -84,4 +81,3 @@ class GitHubUploaderMod(loader.Module):
         else:
             error_msg = r.json().get("message", "Неизвестная ошибка")
             await utils.answer(message, self.strings("error").format(error_msg))
-#модуль @squeeare
