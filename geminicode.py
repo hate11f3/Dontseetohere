@@ -87,6 +87,7 @@ class GeminiGeneratorMod(loader.Module):
         1.  Придумай подходящее, короткое имя для файла в формате `snake_case.py`.
         2.  Придумай подходящее имя для класса в формате `CamelCase`.
         3.  Напиши полный, готовый к использованию код модуля. Код должен начинаться с `from .. import loader, utils`, содержать класс, унаследованный от `loader.Module`, и команду с декоратором `@loader.command`.
+        4.  Перед FILENAME и CLASSNAME всегда пиши #.  #FILENAME:.... #CLASSNAME:.....
 
         ФОРМАТ ОТВЕТА (ОЧЕНЬ ВАЖНО):
         Сначала укажи имя файла и имя класса, а затем, с новой строки, ТОЛЬКО чистый код на Python. Не добавляй никаких объяснений или markdown (` ``` `).
@@ -137,7 +138,7 @@ class GeminiGeneratorMod(loader.Module):
             
             # добавляем код под спойлер ллл
             if len(generated_code) + len(file_caption) < 800: # лимит чатов
-                 final_caption = f"{file_caption}\n\n<tg-spoiler>```python\n{generated_code}\n```</tg-spoiler>"
+                 final_caption = f"{file_caption}\n\n```python\n{generated_code}\n```"
             else:
                  final_caption = file_caption
 
