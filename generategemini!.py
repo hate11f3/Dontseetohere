@@ -116,10 +116,10 @@ class GeminiGeneratorMod(loader.Module):
         6.  Если будут модули с настройками, не делай их через команду, сделай их в self.config
         7.  Если будут важные детали в конфиге по типу "API_KEY" делай валидатор Hidden()
         8.  Всегда проверяй правильность модуля, если думаешь что то не так переделывай, твоя воля.
-        9.  Пиши модуль без '''python в начале
+        9.  Пиши модуль без ```python в начале
         ФОРМАТ ОТВЕТА (ОЧЕНЬ ВАЖНО):
-        Сначала укажи имя файла и имя класса, а затем, с новой строки, ТОЛЬКО чистый код на Python.
-        Можешь добавлять свою подпись в начале чтобы люди ориентировались
+        Сначала укажи имя файла и имя класса, а затем, с новой строки, ТОЛЬКО чистый код на Python. Не пиши в начале ```python
+        Можешь добавлять свою подпись чтобы люди ориентировались
 
         FILENAME: <имя_файла.py>
         CLASSNAME: <ИмяКласса>
@@ -160,7 +160,7 @@ class GeminiGeneratorMod(loader.Module):
              )
 
             if len(generated_code) + len(file_caption) < 800: 
-                final_caption = f"{file_caption}\n\n```python\n{generated_code}\n```"
+                final_caption = f"{file_caption}\n\n \n{generated_code}\n"
             else:
                 final_caption = file_caption
 
@@ -215,14 +215,10 @@ class GeminiGeneratorMod(loader.Module):
         ИСХОДНЫЙ ЗАПРОС ПОЛЬЗОВАТЕЛЯ: "{self.last_prompt}"
 
         ОШИБОЧНЫЙ КОД:
-        ```python
         {self.last_code}
-        ```
 
         СООБЩЕНИЕ ОБ ОШИБКЕ:
-        ```
         {error_text}
-        ```
 
         ДЕЙСТВИЯ:
         1.  Внимательно проанализируй ошибку и код.
@@ -253,7 +249,7 @@ class GeminiGeneratorMod(loader.Module):
              )
 
             if len(fixed_code) + len(file_caption) < 800: 
-                final_caption = f"{file_caption}\n\n```python\n{fixed_code}\n```"
+                final_caption = f"{file_caption}\n\n \n{fixed_code}\n"
             else:
                 final_caption = file_caption
 
