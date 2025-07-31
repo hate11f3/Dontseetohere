@@ -27,7 +27,7 @@ class GeminiGeneratorMod(loader.Module):
                 "DEFAULT_MODEL",
                 "gemini-2.5-pro",
                 "Модель Gemini, используемая по умолчанию. Доступные: gemini-2.5-flash, gemini-2.5-pro, gemini-2.0-flash.",
-                validator=loader.validators.Choice(["gemini-1.5-flash-latest", "gemini-2.0-pro", "gemini-pro"]),
+                validator=loader.validators.Choice(["gemini-2.5-flash", "gemini-2.5-pro", "gemini-2.0-flash"]),
             )
         )
         self.api_ready = False
