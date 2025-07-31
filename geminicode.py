@@ -15,7 +15,7 @@ class GeminiGeneratorMod(loader.Module):
     strings = {"name": "generategemini!"}
 
     def __init__(self):
-        # выбиратель модели
+        
         self.config = loader.ModuleConfig(
             loader.ConfigValue(
                 "GEMINI_API_KEY",
@@ -25,9 +25,9 @@ class GeminiGeneratorMod(loader.Module):
             ),
             loader.ConfigValue(
                 "DEFAULT_MODEL",
-                "gemini-1.5-flash-latest", # быстрая модель по умолчанию
-                "Модель Gemini, используемая по умолчанию. Доступные: gemini-1.5-flash-latest, gemini-1.5-pro-latest, gemini-pro.",
-                validator=loader.validators.Choice(["gemini-1.5-flash-latest", "gemini-1.5-pro-latest", "gemini-pro"]),
+                "gemini-2.5-pro",
+                "Модель Gemini, используемая по умолчанию. Доступные: gemini-2.5-flash, gemini-2.5-pro, gemini-2.0-flash.",
+                validator=loader.validators.Choice(["gemini-1.5-flash-latest", "gemini-2.0-pro", "gemini-pro"]),
             )
         )
         self.api_ready = False
@@ -65,7 +65,6 @@ class GeminiGeneratorMod(loader.Module):
             await utils.answer(message, "<b>[Gemini]</b> ✍️ Пожалуйста, опишите, какой модуль вы хотите создать.\n<b>Пример:</b> <code>.gen модуль, который на команду .ping отвечает pong</code>\n\nИли выберите модель: <code>.gen -m gemini-1.5-pro <запрос></code>")
             return
         
-        # парсинг модели
         chosen_model = self.config["DEFAULT_MODEL"]
         prompt_text = args
         
@@ -76,7 +75,6 @@ class GeminiGeneratorMod(loader.Module):
 
         await utils.answer(message, f"<b>[Gemini]</b> 🧠 Генерирую код, паже подождите")
 
-        # генерация имени
         full_prompt = f"""
         Ты — эксперт в создании модулей для Telegram-юзербота на Python на фреймворке python-userbot (ftg).
         Твоя задача — сгенерировать код для нового модуля на основе запроса и придумать для него имя.
@@ -102,18 +100,15 @@ class GeminiGeneratorMod(loader.Module):
         """
 
         try:
-            # инициалезируем модель
             model = genai.GenerativeModel(chosen_model)
             response = model.generate_content(full_prompt, request_options={"timeout": 120})
             
-            # парсинг ответа
             response_text = response.text.strip()
             
-            file_name = "generated_module.py" # имя модуля
+            file_name = "generated_module.py"
             generated_code = response_text
 
             try:
-                # trying copy код и modyl'
                 lines = response_text.split('\n')
                 file_name_line = next((line for line in lines if line.upper().startswith("FILENAME:")), None)
                 
@@ -123,7 +118,6 @@ class GeminiGeneratorMod(loader.Module):
                     code_start_index = response_text.find(lines[2])
                     generated_code = response_text[code_start_index:].strip()
                 else:
-                    # нету названи😭
                     file_name_base = "".join(filter(str.isalnum, "_".join(prompt_text.split(" ")[:3]).lower()))
                     file_name = f"{file_name_base}.py"
 
@@ -131,13 +125,11 @@ class GeminiGeneratorMod(loader.Module):
                 print(f"Не удалось распарсить ответ Gemini, используется стандартное имя. Ошибка: {e}")
 
 
-            # код и файл в текст
             file_caption = (
                 f"<b>[Gemini]</b> ✨ Ваш новый модуль <code>{file_name}</code> готов!\n\n"
-            )
-            
-            # добавляем код под спойлер ллл
-            if len(generated_code) + len(file_caption) < 800: # лимит чатов
+             )
+
+            if len(generated_code) + len(file_caption) < 800: 
                  final_caption = f"{file_caption}\n\n```python\n{generated_code}\n```"
             else:
                  final_caption = file_caption
@@ -151,7 +143,6 @@ class GeminiGeneratorMod(loader.Module):
                 caption=final_caption,
                 reply_to=message.id
             )
-            # удаление "Генерирую код..."
             await message.delete()
 
 
