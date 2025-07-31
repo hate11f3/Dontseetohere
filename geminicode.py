@@ -36,7 +36,7 @@ class GeminiGeneratorMod(loader.Module):
         """Вызывается при загрузке юзербота, настраивает API Gemini."""
         self.client = client
         
-        gemini_api_key = self.config["GEMINI_API_KEY"] or os.environ.get("GEMINI_API_KEY")
+        gemini_api_key = self.config["GEMINI_API_KEY"] 
 
         if not gemini_api_key:
             print("ПРЕДУПРЕЖДЕНИЕ: GEMINI_API_KEY не найден. Модуль генерации не будет работать.")
@@ -57,12 +57,12 @@ class GeminiGeneratorMod(loader.Module):
     async def gencmd(self, message):
         """[-m model] <description> - Generates a new module using Gemini."""
         if not self.api_ready:
-            await utils.answer(message, "<b>[Gemini]</b> 🚫 API-ключ Gemini не настроен или произошла ошибка при инициализации. Проверьте логи.")
+            await utils.answer(message, "<b>[Gemini]</b> 🚫 API-ключ Gemini не настроен или произошла ошибка при инициализации.")
             return
 
         args = utils.get_args_raw(message)
         if not args:
-            await utils.answer(message, "<b>[Gemini]</b> ✍️ Пожалуйста, опишите, какой модуль вы хотите создать.\n<b>Пример:</b> <code>.gen модуль, который на команду .ping отвечает pong</code>\n\nИли выберите модель: <code>.gen -m gemini-1.5-pro <запрос></code>")
+            await utils.answer(message, "<b>[Gemini]</b> ✍️ Пожалуйста, опишите, какой модуль вы хотите создать.\n<b>Пример:</b> <code>.gen модуль, который на команду .ping отвечает pong</code>\n\nИли выберите модель: <code>.gen -m gemini-2.5-pro <запрос></code>")
             return
         
         chosen_model = self.config["DEFAULT_MODEL"]
@@ -71,7 +71,7 @@ class GeminiGeneratorMod(loader.Module):
         model_match = re.match(r"-(m|-model)\s+([\w.-]+)\s+", args)
         if model_match:
             chosen_model = model_match.group(2)
-            prompt_text = args[model_match.end():] # текст запроса
+            prompt_text = args[model_match.end():] 
 
         await utils.answer(message, f"<b>[Gemini]</b> 🧠 Генерирую код, паже подождите")
 
