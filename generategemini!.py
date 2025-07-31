@@ -177,7 +177,7 @@ class GeminiGeneratorMod(loader.Module):
 
         except Exception:
             error_trace = traceback.format_exc()
-            await utils.answer(message, f"<b>[Gemini]</b> ❄1�7 Произошла ошибка при генерации:\n<code>{error_trace}</code>")
+            await utils.answer(message, f"<b>[Gemini]</b> 💔 Произошла ошибка при генерации:\n<code>{error_trace}</code>")
 
     @loader.command(
         alias='genfix',
@@ -248,7 +248,7 @@ class GeminiGeneratorMod(loader.Module):
                 file_name = file_name_line.split(':', 1)[1].strip()
 
             file_caption = (
-                f"<b>[Gemini]</b> 🛠︄1�7 Ваш исправленный модуль <code>{file_name}</code> готов!\n\n"
+                f"<b>[Gemini]</b> 🛠︄ Ваш исправленный модуль <code>{file_name}</code> готов!\n\n"
              )
 
             if len(fixed_code) + len(file_caption) < 800: 
@@ -269,4 +269,4 @@ class GeminiGeneratorMod(loader.Module):
 
         except Exception:
             error_trace = traceback.format_exc()
-            await utils.answer(message, f"<b>[Gemini]</b> ❄1�7 Произошла ошибка при исправлении:\n<code>{error_trace}</code>")
+            await utils.answer(message, f"<b>[Gemini]</b> 💔 Произошла ошибка при исправлении:\n<code>{error_trace}</code>")
