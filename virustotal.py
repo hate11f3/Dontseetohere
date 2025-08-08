@@ -20,7 +20,7 @@ class VirusTotalScan(loader.Module):
     async def check(self, m):
         api_key = self.config["vt_api"]
         if not api_key:
-            return await utils.answer(m, "<b>❌ Укажи API ключ через .cfg vt_api</b>")
+            return await utils.answer(m, "<b>❌ Укажи API ключ в кфг .cfg VirusTotal </b>")
 
         reply = await m.get_reply_message()
         if not reply or not (reply.file or reply.text):
@@ -61,10 +61,10 @@ class VirusTotalScan(loader.Module):
 
         for engine, result in results.items():
             if result["category"] != "undetected":
-                text += f"{engine}: {result['result']}\n"
+                text += f"<blockquote>{engine}: {result['result']}\n</blockquote>"
 
-        if len(text) > 500:
-            filename = "vt_result.txt"
+        if len(text) > 2500:
+            filename = "result.txt"
             with open(filename, "w", encoding="utf-8") as f:
                 f.write(text.replace("<b>", "").replace("</b>", "").replace("<code>", "").replace("</code>", ""))
             await m.client.send_file(m.chat_id, filename, caption="📄 Результат")
